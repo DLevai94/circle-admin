@@ -30,7 +30,7 @@ export default function Home() {
       </Head>
 
       <main className="max-w-md mx-auto">
-        <h1 className="text-red-800 font-extrabold text-2xl mb-8">Circle Admin</h1>
+        <h1 className="text-red-800 font-extrabold text-2xl mb-8">The Missing Circle Admin</h1>
 
         <form className="flex flex-col" onSubmit={onSubmit}>
           <input
