@@ -19,7 +19,7 @@ export default function Home() {
       },
     });
     const result = await response.json();
-    clg(result);
+    console.log(result);
     setData(result.data);
   });
 
