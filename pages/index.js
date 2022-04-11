@@ -1,8 +1,9 @@
+import { useState } from 'react';
 import Head from 'next/head';
 import { useForm } from 'react-hook-form';
-import styles from '../styles/Home.module.css';
 
 export default function Home() {
+  const [data, setData] = useState(null);
   const {
     register,
     handleSubmit,
@@ -17,17 +18,19 @@ export default function Home() {
         'Content-Type': 'application/json',
       },
     });
-    return response;
+    const result = await response.json();
+    clg(result);
+    setData(result.data);
   });
 
   return (
-    <div className={styles.container}>
+    <div>
       <Head>
         <title>Circle Admin</title>
       </Head>
 
-      <main className={styles.main}>
-        <h1 className={styles.title}>Circle Admin</h1>
+      <main className="max-w-md mx-auto">
+        <h1 className="text-red-800 font-extrabold text-2xl mb-8">Circle Admin</h1>
 
         <form className="flex flex-col" onSubmit={onSubmit}>
           <input
@@ -64,14 +67,13 @@ export default function Home() {
           {errors.status && <span>Error with status field</span>}
           <button
             className="bg-black py-2 px-4 text-white font-bold hover:bg-opacity-70 transition duration-500"
-            type="submit"
-          >
+            type="submit">
             Send
           </button>
         </form>
+        <h2>Results</h2>
+        <pre>{data}</pre>
       </main>
-
-      <footer className={styles.footer}>Powered by Circle API</footer>
     </div>
   );
 }

@@ -1,4 +1,6 @@
-export default (req, res) => {
+/* eslint-disable import/no-anonymous-default-export */
+
+export default async (req, res) => {
   if (req.method !== 'POST') {
     res.status(405).send({ message: 'Only POST requests allowed' });
     return;
@@ -14,23 +16,23 @@ export default (req, res) => {
     return;
   }
 
-  let myHeaders = new Headers();
-  myHeaders.append('Authorization', `Token ${req.body.secret}`);
-  myHeaders.append('Content-Type', `application/json`);
-
   const requestOptions = {
     method: 'GET',
-    headers: myHeaders,
+    headers: {
+      Authorization: `Token ${req.body.secret}`,
+      'Content-Type': 'application/json',
+    },
     redirect: 'follow',
   };
 
-  fetch(
-    `https://app.circle.so/api/v1/community_member_subscriptions?community_id=${req.body.community_id}`,
-    requestOptions
-  )
-    .then((response) => response.text())
-    .then((result) => console.log(result))
-    .catch((error) => console.log('error', error));
-
-  res.status(200).send({ message: 'ok' });
+  try {
+    const response = await fetch(
+      `https://app.circle.so/api/v1/community_member_subscriptions?community_id=${req.body.community_id}`,
+      requestOptions
+    );
+    const result = await response.json();
+    res.status(200).send({ message: 'ok', data: result });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
 };
